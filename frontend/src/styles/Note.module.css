@@ -1,0 +1,43 @@
+.noteCard {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+  min-width: 280px;
+  max-width: 350px;
+}
+
+.noteCard:hover {
+  transform: scale(1.03);
+}
+
+.cardText {
+  white-space: pre-line;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.cardTitle {
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.noteMeta {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+  margin-top: 10px;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.button {
+  transition: all 1s ease-in-out;
+}
