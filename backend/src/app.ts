@@ -1,21 +1,28 @@
 import 'dotenv/config';
-import express from 'express';
-import NoteModel from './models/note';
+import express, { NextFunction, Request, Response } from 'express';
+import notesRoutes from './routes/notes';
+import createHttpError, { isHttpError } from 'http-errors';
 
 const app = express();
 
-app.get('/', async (req, res) => {
-  try {
-    const notes = await NoteModel.find().exec();
-    res.status(200).json(notes);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: error });
-  }
+app.use(express.json());
+
+app.use('/api/notes', notesRoutes);
+
+app.use((req, res, next) => {
+  next(createHttpError(404, 'Endpoint Not Found!'));
 });
 
-app.use((req, res) => {
-  res.status(404).json({ error: 'Endpoint Not Found!' });
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
+  console.error(error);
+  let errorMessage = 'An unknown error occurred';
+  let statusCode = 500;
+  if (isHttpError(error)) {
+    statusCode = error.status;
+    errorMessage = error.message;
+  }
+  res.status(statusCode).json({ error: errorMessage });
 });
 
 export default app;
