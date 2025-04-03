@@ -52,8 +52,11 @@ const NewEditNoteDialog = ({ noteToEdit, onDismiss, onNoteSaved }: Props) => {
               type="text"
               placeholder="Title"
               isInvalid={!!errors.title}
-              {...register('title', { required: 'Required' })}
+              {...register('title', { required: 'Title is required' })}
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.title?.message}
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
@@ -64,9 +67,6 @@ const NewEditNoteDialog = ({ noteToEdit, onDismiss, onNoteSaved }: Props) => {
               placeholder="Text"
               {...register('text')}
             />
-            <Form.Control.Feedback type="invalid">
-              {errors.title?.message}
-            </Form.Control.Feedback>
           </Form.Group>
         </Form>
       </Modal.Body>

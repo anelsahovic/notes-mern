@@ -22,7 +22,7 @@ const Note = ({ note, onNoteClicked, onDeleteNoteClicked }: NoteProps) => {
       : null;
 
   return (
-    <Card className={`${styles.noteCard} shadow-sm`}>
+    <Card className={`${styles.noteCard} shadow-sm flex w-100`}>
       <Card.Body>
         <Card.Title className={styles.cardTitle}>{title}</Card.Title>
         <Card.Text className={styles.cardText}>{text}</Card.Text>
