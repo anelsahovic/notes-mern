@@ -9,13 +9,13 @@ interface Props {
 const HideNotes = ({ onLoginClicked, onSignUpClicked }: Props) => {
   return (
     <Container className="d-flex flex-column align-items-center justify-content-center">
-      <Alert variant="primary" className="text-center p-4 mt-5">
+      <Alert variant="danger" className="text-center p-4 mt-5">
         <h4 className="mb-3">Access Denied</h4>
         <p>You need to log in to see notes.</p>
-        <Button variant="outline-dark" onClick={onLoginClicked} className="m-2">
+        <Button variant="secondary" onClick={onLoginClicked} className="m-2">
           Log In
         </Button>
-        <Button variant="dark" onClick={onSignUpClicked}>
+        <Button variant="primary" onClick={onSignUpClicked}>
           Sign Up
         </Button>
       </Alert>
