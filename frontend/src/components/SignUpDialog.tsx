@@ -1,8 +1,9 @@
-import React from 'react';
-import { User } from '../models/user';
+import { useState } from 'react';
+import { Alert, Button, Form, Modal } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
+import { ConflictError } from '../errors/http_errors';
+import { User } from '../models/user';
 import { SignUp, SignUpCredentials } from '../network/userAPI';
-import { Button, Form, Modal } from 'react-bootstrap';
 
 interface Props {
   onDismiss: () => void;
@@ -10,6 +11,8 @@ interface Props {
 }
 
 const SignUpDialog = ({ onDismiss, onSignUpSuccess }: Props) => {
+  const [errorText, setErrorText] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -21,6 +24,10 @@ const SignUpDialog = ({ onDismiss, onSignUpSuccess }: Props) => {
       const newUser = await SignUp(credentials);
       onSignUpSuccess(newUser);
     } catch (error) {
+      if (error instanceof ConflictError) {
+        setErrorText(error.message);
+        console.error(error);
+      }
       console.error(error);
     }
   }
@@ -30,6 +37,8 @@ const SignUpDialog = ({ onDismiss, onSignUpSuccess }: Props) => {
         <Modal.Title>Sign Up</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {errorText && <Alert variant="danger">{errorText}</Alert>}
+
         <Form id="signUpForm" onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="mb-3">
             <Form.Label>Username</Form.Label>

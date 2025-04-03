@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { User } from '../models/user';
 import { useForm } from 'react-hook-form';
 import { login, LoginCredentials } from '../network/userAPI';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Alert, Button, Form, Modal } from 'react-bootstrap';
+import { UnauthorizedError } from '../errors/http_errors';
 
 interface Props {
   onDismiss: () => void;
@@ -10,6 +11,8 @@ interface Props {
 }
 
 const LoginDialog = ({ onDismiss, onLoginSuccessful }: Props) => {
+  const [errorText, setErrorText] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -21,6 +24,10 @@ const LoginDialog = ({ onDismiss, onLoginSuccessful }: Props) => {
       const user = await login(credentials);
       onLoginSuccessful(user);
     } catch (error) {
+      if (error instanceof UnauthorizedError) {
+        setErrorText(error.message);
+        console.error(error);
+      }
       console.error(error);
     }
   }
@@ -31,6 +38,8 @@ const LoginDialog = ({ onDismiss, onLoginSuccessful }: Props) => {
       </Modal.Header>
 
       <Modal.Body>
+        {errorText && <Alert variant="danger">{errorText}</Alert>}
+
         <Form id="LoginForm" onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="mb-3">
             <Form.Label>Username</Form.Label>
