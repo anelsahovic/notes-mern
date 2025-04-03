@@ -5,9 +5,11 @@ import { format } from 'date-fns';
 
 interface NoteProps {
   note: NoteModel;
+  onNoteClicked: (note: NoteModel) => void;
+  onDeleteNoteClicked: (note: NoteModel) => void;
 }
 
-const Note = ({ note }: NoteProps) => {
+const Note = ({ note, onNoteClicked, onDeleteNoteClicked }: NoteProps) => {
   const { title, text, createdAt, updatedAt } = note;
 
   // Ensure dates are valid before formatting
@@ -35,10 +37,21 @@ const Note = ({ note }: NoteProps) => {
 
         {/* Action Buttons */}
         <div className={styles.buttonGroup}>
-          <Button variant="outline-primary" size="sm">
+          <Button
+            variant="outline-primary"
+            size="sm"
+            onClick={() => onNoteClicked(note)}
+          >
             ✏️ Edit
           </Button>
-          <Button variant="outline-danger" size="sm">
+          <Button
+            variant="outline-danger"
+            size="sm"
+            onClick={(e) => {
+              onDeleteNoteClicked(note);
+              e.stopPropagation();
+            }}
+          >
             🗑️ Delete
           </Button>
         </div>
