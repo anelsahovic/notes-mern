@@ -26,7 +26,7 @@ const LoginDialog = ({ onDismiss, onLoginSuccessful }: Props) => {
   }
   return (
     <Modal show onHide={onDismiss}>
-      <Modal.Header>
+      <Modal.Header closeButton>
         <Modal.Title>Log In</Modal.Title>
       </Modal.Header>
 

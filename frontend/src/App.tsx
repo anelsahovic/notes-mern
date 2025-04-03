@@ -4,8 +4,11 @@ import LoginDialog from './components/LoginDialog';
 import SignUpDialog from './components/SignUpDialog';
 import { User } from './models/user';
 import { getLoggedInUser } from './network/userAPI';
-import ShowNotes from './components/ShowNotes';
-import HideNotes from './components/HideNotes';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
+import NotesPage from './pages/NotesPage';
+import HomePage from './pages/HomePage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
@@ -25,43 +28,55 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <NavBar
-        loggedInUser={loggedInUser}
-        onLoginClicked={() => setShowLoginDialog(true)}
-        onSignUpClicked={() => setShowSignUpDialog(true)}
-        onLogoutSuccessful={() => setLoggedInUser(null)}
-      />
-
-      {loggedInUser ? (
-        <ShowNotes />
-      ) : (
-        <HideNotes
+    <BrowserRouter>
+      <div>
+        <NavBar
+          loggedInUser={loggedInUser}
           onLoginClicked={() => setShowLoginDialog(true)}
           onSignUpClicked={() => setShowSignUpDialog(true)}
+          onLogoutSuccessful={() => setLoggedInUser(null)}
         />
-      )}
 
-      {showSignUpDialog && (
-        <SignUpDialog
-          onDismiss={() => setShowSignUpDialog(false)}
-          onSignUpSuccess={(user) => {
-            setLoggedInUser(user);
-            setShowSignUpDialog(false);
-          }}
-        />
-      )}
+        <Container>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
 
-      {showLoginDialog && (
-        <LoginDialog
-          onDismiss={() => setShowLoginDialog(false)}
-          onLoginSuccessful={(user) => {
-            setLoggedInUser(user);
-            setShowLoginDialog(false);
-          }}
-        />
-      )}
-    </div>
+            <Route
+              path="/notes"
+              element={
+                <NotesPage
+                  loggedInUser={loggedInUser}
+                  onLoginClicked={() => setShowLoginDialog(true)}
+                  onSignUpClicked={() => setShowSignUpDialog(true)}
+                />
+              }
+            />
+
+            <Route path="/*" element={<NotFoundPage />} />
+          </Routes>
+        </Container>
+
+        {showSignUpDialog && (
+          <SignUpDialog
+            onDismiss={() => setShowSignUpDialog(false)}
+            onSignUpSuccess={(user) => {
+              setLoggedInUser(user);
+              setShowSignUpDialog(false);
+            }}
+          />
+        )}
+
+        {showLoginDialog && (
+          <LoginDialog
+            onDismiss={() => setShowLoginDialog(false)}
+            onLoginSuccessful={(user) => {
+              setLoggedInUser(user);
+              setShowLoginDialog(false);
+            }}
+          />
+        )}
+      </div>
+    </BrowserRouter>
   );
 }
 
